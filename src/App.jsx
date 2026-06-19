@@ -115,7 +115,7 @@ export default function App() {
       const dotDataUrl = dotCanvas.toDataURL()
 
       const canvas = await html2canvas(templateRef.current, {
-        scale: 3,
+        scale: 4,
         useCORS: true,
         allowTaint: true,
         logging: false,
