@@ -55,6 +55,15 @@ function UploadSlot({ label, image, onUpload, inputRef, projectFirst, projectRes
           </div>
         </div>
       )}
+        {label === 'Before' && (
+        <div className="project-block">
+          <span className="project-eyebrow">As Designed</span>
+          <div className="project-name-line">
+            <span className="project-first">Raw</span>
+            <span className="project-rest">Concept</span>
+          </div>
+        </div>
+      )}
 
       {image && (
         <button
