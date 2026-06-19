@@ -110,7 +110,7 @@ export default function App() {
       ctx.fillRect(0, 0, 44, 44)
       ctx.beginPath()
       ctx.arc(22, 22, 1.5, 0, Math.PI * 2)  // radius 1 → 1.5
-      ctx.fillStyle = '#888'                  // warna lebih gelap
+      ctx.fillStyle = '#555'                  // warna lebih gelap
       ctx.fill()
       const dotDataUrl = dotCanvas.toDataURL()
 
