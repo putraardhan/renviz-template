@@ -16,21 +16,19 @@ const AFTER_POINTS = [
   'Langsung terlihat jadi nyata',
 ]
 
-const KEUNGGULAN = [
-  { icon: '⚡', title: 'Cepat', desc: 'Render dalam hitungan detik, bukan jam' },
-  { icon: '🎨', title: 'Realistis', desc: 'AI menghasilkan detail material akurat' },
-  { icon: '💡', title: 'Mudah', desc: 'Upload foto, langsung dapat hasil render' },
-  { icon: '⭐', title: 'Profesional', desc: 'Kualitas setara render studio 3D' },
+const KENAPA = [
+  { icon: '◈', title: 'Visual Lebih Realistis', desc: 'Render AI menghasilkan tampilan nyata dalam detik' },
+  { icon: '❋', title: 'Desain Lebih Padat', desc: 'Semua detail tersampaikan dengan jelas ke klien' },
+  { icon: 'T', title: 'Tipografi Elegan', desc: 'Presentasi profesional dengan visual berkualitas tinggi' },
+  { icon: '☆', title: 'Siap Presentasi', desc: 'Langsung bisa digunakan untuk pitching ke klien' },
 ]
 
 function ImageSlot({ label, image, onUpload, inputRef }) {
-  const handleClick = () => inputRef.current?.click()
   const handleDrop = (e) => {
     e.preventDefault()
     const file = e.dataTransfer.files[0]
     if (file && file.type.startsWith('image/')) processFile(file)
   }
-  const handleDragOver = (e) => e.preventDefault()
   const processFile = (file) => {
     const reader = new FileReader()
     reader.onload = (ev) => onUpload(ev.target.result)
@@ -39,10 +37,10 @@ function ImageSlot({ label, image, onUpload, inputRef }) {
 
   return (
     <div
-      className={`img-slot ${label === 'after' ? 'img-slot--after' : ''}`}
-      onClick={!image ? handleClick : undefined}
+      className="img-slot"
+      onClick={!image ? () => inputRef.current?.click() : undefined}
       onDrop={handleDrop}
-      onDragOver={handleDragOver}
+      onDragOver={(e) => e.preventDefault()}
       style={{ cursor: image ? 'default' : 'pointer' }}
     >
       {image ? (
@@ -52,7 +50,7 @@ function ImageSlot({ label, image, onUpload, inputRef }) {
         </>
       ) : (
         <div className="slot-placeholder">
-          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" />
             <circle cx="8.5" cy="8.5" r="1.5" />
             <polyline points="21 15 16 10 5 21" />
@@ -105,32 +103,32 @@ export default function App() {
   return (
     <div className="app-shell">
 
-      {/* ── TEMPLATE ── */}
       <div className="template-wrapper" ref={templateRef}>
         <div className="template-inner">
 
           {/* Brand pill */}
           <div className="brand-pill">
-            <span className="brand-dot">◆</span> RENVIZ · AI RENDER <span className="brand-dot">◆</span>
+            <span className="brand-dot" />
+            RENVIZ · AI RENDER
           </div>
 
           {/* Cards */}
           <div className="cards-row">
 
-            {/* BEFORE card */}
+            {/* BEFORE */}
             <div className="card card--before">
               <div className="card-label card-label--before">BEFORE</div>
               <ImageSlot label="before" image={beforeImage} onUpload={setBeforeImage} inputRef={beforeInputRef} />
               <div className="card-body">
                 <div className="card-eyebrow card-eyebrow--before">AS DESIGNED</div>
                 <div className="card-title">
-                  <span className="card-title-first">{projFirst}</span>
-                  {projRest && <span className="card-title-rest"> {projRest}</span>}
+                  <span className="card-title-first">Lorem </span>
+                  <span className="card-title-rest">Ipsum</span>
                 </div>
                 <ul className="point-list">
                   {BEFORE_POINTS.map((p, i) => (
                     <li key={i} className="point-item point-item--before">
-                      <span className="point-icon">✕</span> {p}
+                      <span className="point-icon">⊗</span>{p}
                     </li>
                   ))}
                 </ul>
@@ -140,20 +138,20 @@ export default function App() {
             {/* Arrow */}
             <div className="arrow-divider">→</div>
 
-            {/* AFTER card */}
+            {/* AFTER */}
             <div className="card card--after">
               <div className="card-label card-label--after">AFTER</div>
               <ImageSlot label="after" image={afterImage} onUpload={setAfterImage} inputRef={afterInputRef} />
               <div className="card-body">
                 <div className="card-eyebrow card-eyebrow--after">RENDERED WITH AI</div>
                 <div className="card-title">
-                  <span className="card-title-first">{projFirst}</span>
-                  {projRest && <span className="card-title-rest"> {projRest}</span>}
+                  <span className="card-title-first">{projFirst} </span>
+                  {projRest && <span className="card-title-rest">{projRest}</span>}
                 </div>
                 <ul className="point-list">
                   {AFTER_POINTS.map((p, i) => (
                     <li key={i} className="point-item point-item--after">
-                      <span className="point-icon">✓</span> {p}
+                      <span className="point-icon">⊙</span>{p}
                     </li>
                   ))}
                 </ul>
@@ -162,15 +160,15 @@ export default function App() {
 
           </div>
 
-          {/* Keunggulan */}
-          <div className="keunggulan-section">
-            <div className="keunggulan-pill">KEUNGGULAN REDESIGN</div>
-            <div className="keunggulan-row">
-              {KEUNGGULAN.map((k, i) => (
-                <div key={i} className="keunggulan-item">
-                  <div className="keunggulan-icon">{k.icon}</div>
-                  <div className="keunggulan-title">{k.title}</div>
-                  <div className="keunggulan-desc">{k.desc}</div>
+          {/* Kenapa Renviz */}
+          <div className="kenapa-section">
+            <div className="kenapa-pill">KENAPA HARUS PAKAI RENVIZ?</div>
+            <div className="kenapa-row">
+              {KENAPA.map((k, i) => (
+                <div key={i} className="kenapa-item">
+                  <div className="kenapa-icon">{k.icon}</div>
+                  <div className="kenapa-title">{k.title}</div>
+                  <div className="kenapa-desc">{k.desc}</div>
                 </div>
               ))}
             </div>
@@ -179,7 +177,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* ── CONTROLS ── */}
+      {/* Controls */}
       <div className="controls">
         <div className="ctrl-group">
           <label className="ctrl-label">Nama Project</label>
