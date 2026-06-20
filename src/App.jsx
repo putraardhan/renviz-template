@@ -2,7 +2,28 @@ import { useState, useRef, useCallback } from 'react'
 import domtoimage from 'dom-to-image-more'
 import './App.css'
 
-function UploadSlot({ label, image, onUpload, inputRef, projectFirst, projectRest }) {
+const BEFORE_POINTS = [
+  'Tampilan flat tanpa material',
+  'Tidak ada pencahayaan realistis',
+  'Sulit dipresentasikan ke klien',
+  'Hanya bisa dilihat oleh arsitek',
+]
+
+const AFTER_POINTS = [
+  'Material dan tekstur realistis',
+  'Pencahayaan natural & dramatis',
+  'Siap presentasi ke klien',
+  'Langsung terlihat jadi nyata',
+]
+
+const KEUNGGULAN = [
+  { icon: '⚡', title: 'Cepat', desc: 'Render dalam hitungan detik, bukan jam' },
+  { icon: '🎨', title: 'Realistis', desc: 'AI menghasilkan detail material akurat' },
+  { icon: '💡', title: 'Mudah', desc: 'Upload foto, langsung dapat hasil render' },
+  { icon: '⭐', title: 'Profesional', desc: 'Kualitas setara render studio 3D' },
+]
+
+function ImageSlot({ label, image, onUpload, inputRef }) {
   const handleClick = () => inputRef.current?.click()
   const handleDrop = (e) => {
     e.preventDefault()
@@ -15,73 +36,32 @@ function UploadSlot({ label, image, onUpload, inputRef, projectFirst, projectRes
     reader.onload = (ev) => onUpload(ev.target.result)
     reader.readAsDataURL(file)
   }
-  const handleChange = (e) => {
-    const file = e.target.files[0]
-    if (file) processFile(file)
-  }
 
   return (
     <div
-      className="dark-card"
+      className={`img-slot ${label === 'after' ? 'img-slot--after' : ''}`}
       onClick={!image ? handleClick : undefined}
       onDrop={handleDrop}
       onDragOver={handleDragOver}
       style={{ cursor: image ? 'default' : 'pointer' }}
     >
-      <div className="polaroid">
-        <div className="polaroid-inner">
-          {image ? (
-            <img src={image} alt={label} className="slot-img" />
-          ) : (
-            <div className="slot-placeholder">
-              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                <rect x="3" y="3" width="18" height="18" rx="2" />
-                <circle cx="8.5" cy="8.5" r="1.5" />
-                <polyline points="21 15 16 10 5 21" />
-              </svg>
-              <span>Upload foto</span>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {label === 'After' && (
-        <div className="project-block">
-          <span className="project-eyebrow">Rendered with AI</span>
-          <div className="project-name-line">
-            <span className="project-first">{projectFirst}</span>
-            {projectRest && <span className="project-rest">{projectRest}</span>}
-          </div>
+      {image ? (
+        <>
+          <img src={image} alt={label} className="slot-img" />
+          <button className="remove-btn" onClick={(e) => { e.stopPropagation(); onUpload(null) }}>×</button>
+        </>
+      ) : (
+        <div className="slot-placeholder">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+          <span>Upload Foto</span>
         </div>
       )}
-
-      {label === 'Before' && (
-        <div className="project-block">
-          <span className="project-eyebrow">As Designed</span>
-          <div className="project-name-line">
-            <span className="project-first">Raw</span>
-            <span className="project-rest">Concept</span>
-          </div>
-        </div>
-      )}
-
-      {image && (
-        <button
-          className="remove-btn"
-          onClick={(e) => { e.stopPropagation(); onUpload(null) }}
-          title="Hapus foto"
-        >
-          ×
-        </button>
-      )}
-
-      <input
-        ref={inputRef}
-        type="file"
-        accept="image/*"
-        style={{ display: 'none' }}
-        onChange={handleChange}
-      />
+      <input ref={inputRef} type="file" accept="image/*" style={{ display: 'none' }}
+        onChange={(e) => { const f = e.target.files[0]; if (f) processFile(f) }} />
     </div>
   )
 }
@@ -97,29 +77,22 @@ export default function App() {
   const templateRef = useRef(null)
 
   const displayProject = projectName.trim() || 'Nama Project'
-
-  const splitProject = () => {
-    const words = displayProject.split(' ')
-    if (words.length === 1) return { first: words[0], rest: '' }
-    return { first: words[0], rest: words.slice(1).join(' ') }
-  }
-  const { first, rest } = splitProject()
+  const words = displayProject.split(' ')
+  const projFirst = words[0]
+  const projRest = words.slice(1).join(' ')
 
   const handleDownload = useCallback(async () => {
     if (!templateRef.current) return
     setDownloading(true)
     try {
-      const dataUrl = await domtoimage.toPng(templateRef.current, {
-        width: templateRef.current.offsetWidth * 3,
-        height: templateRef.current.offsetHeight * 3,
-        style: {
-          transform: `scale(3)`,
-          transformOrigin: 'top left',
-        }
+      const el = templateRef.current
+      const dataUrl = await domtoimage.toPng(el, {
+        width: el.offsetWidth * 3,
+        height: el.offsetHeight * 3,
+        style: { transform: 'scale(3)', transformOrigin: 'top left' }
       })
       const link = document.createElement('a')
-      const slug = displayProject.toLowerCase().replace(/\s+/g, '-')
-      link.download = `renviz-${slug}.png`
+      link.download = `renviz-${displayProject.toLowerCase().replace(/\s+/g, '-')}.png`
       link.href = dataUrl
       link.click()
     } catch (err) {
@@ -132,72 +105,97 @@ export default function App() {
   return (
     <div className="app-shell">
 
-      <div className="template-wrapper" id="rv-template" ref={templateRef}>
-        <div className="dot-grid" />
-
+      {/* ── TEMPLATE ── */}
+      <div className="template-wrapper" ref={templateRef}>
         <div className="template-inner">
 
-          <div className="brand-pill">Renviz · AI Render</div>
-
-          <div className="label-row">
-            <div className="label-col">
-              <span className="label-big">Before</span>
-            </div>
-            <div className="label-col">
-              <span className="label-big">After</span>
-            </div>
+          {/* Brand pill */}
+          <div className="brand-pill">
+            <span className="brand-dot">◆</span> RENVIZ · AI RENDER <span className="brand-dot">◆</span>
           </div>
 
+          {/* Cards */}
           <div className="cards-row">
-            <UploadSlot
-              label="Before"
-              image={beforeImage}
-              onUpload={setBeforeImage}
-              inputRef={beforeInputRef}
-              projectFirst={first}
-              projectRest={rest}
-            />
-            <UploadSlot
-              label="After"
-              image={afterImage}
-              onUpload={setAfterImage}
-              inputRef={afterInputRef}
-              projectFirst={first}
-              projectRest={rest}
-            />
+
+            {/* BEFORE card */}
+            <div className="card card--before">
+              <div className="card-label card-label--before">BEFORE</div>
+              <ImageSlot label="before" image={beforeImage} onUpload={setBeforeImage} inputRef={beforeInputRef} />
+              <div className="card-body">
+                <div className="card-eyebrow card-eyebrow--before">AS DESIGNED</div>
+                <div className="card-title">
+                  <span className="card-title-first">{projFirst}</span>
+                  {projRest && <span className="card-title-rest"> {projRest}</span>}
+                </div>
+                <ul className="point-list">
+                  {BEFORE_POINTS.map((p, i) => (
+                    <li key={i} className="point-item point-item--before">
+                      <span className="point-icon">✕</span> {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Arrow */}
+            <div className="arrow-divider">→</div>
+
+            {/* AFTER card */}
+            <div className="card card--after">
+              <div className="card-label card-label--after">AFTER</div>
+              <ImageSlot label="after" image={afterImage} onUpload={setAfterImage} inputRef={afterInputRef} />
+              <div className="card-body">
+                <div className="card-eyebrow card-eyebrow--after">RENDERED WITH AI</div>
+                <div className="card-title">
+                  <span className="card-title-first">{projFirst}</span>
+                  {projRest && <span className="card-title-rest"> {projRest}</span>}
+                </div>
+                <ul className="point-list">
+                  {AFTER_POINTS.map((p, i) => (
+                    <li key={i} className="point-item point-item--after">
+                      <span className="point-icon">✓</span> {p}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+          </div>
+
+          {/* Keunggulan */}
+          <div className="keunggulan-section">
+            <div className="keunggulan-pill">KEUNGGULAN REDESIGN</div>
+            <div className="keunggulan-row">
+              {KEUNGGULAN.map((k, i) => (
+                <div key={i} className="keunggulan-item">
+                  <div className="keunggulan-icon">{k.icon}</div>
+                  <div className="keunggulan-title">{k.title}</div>
+                  <div className="keunggulan-desc">{k.desc}</div>
+                </div>
+              ))}
+            </div>
           </div>
 
         </div>
       </div>
 
+      {/* ── CONTROLS ── */}
       <div className="controls">
         <div className="ctrl-group">
           <label className="ctrl-label">Nama Project</label>
-          <input
-            className="ctrl-input"
-            type="text"
-            value={projectName}
-            onChange={(e) => setProjectName(e.target.value)}
-            placeholder="mis. A+W House"
-          />
+          <input className="ctrl-input" type="text" value={projectName}
+            onChange={(e) => setProjectName(e.target.value)} placeholder="mis. A+W House" />
         </div>
-
         <div className="ctrl-uploads">
           <button className="upload-btn" onClick={() => beforeInputRef.current?.click()}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             {beforeImage ? '✓ Before uploaded' : 'Upload Before'}
           </button>
           <button className="upload-btn" onClick={() => afterInputRef.current?.click()}>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
             {afterImage ? '✓ After uploaded' : 'Upload After'}
           </button>
         </div>
-
-        <button
-          className={`download-btn ${downloading ? 'loading' : ''}`}
-          onClick={handleDownload}
-          disabled={downloading}
-        >
+        <button className={`download-btn ${downloading ? 'loading' : ''}`}
+          onClick={handleDownload} disabled={downloading}>
           {downloading ? 'Generating...' : 'Download PNG'}
         </button>
       </div>
