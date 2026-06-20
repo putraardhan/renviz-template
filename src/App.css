@@ -125,6 +125,8 @@
   font-size: 8px;
   font-weight: 700;
   letter-spacing: 0.18em;
+  text-indent: 0.18em;
+  text-align: center;
   padding: 3px 14px;
   border-radius: 6px;
   z-index: 2;
@@ -277,6 +279,50 @@
 .bullet-icon { flex-shrink: 0; }
 .bullet--before .bullet-icon { color: #ccc; }
 .bullet--after .bullet-icon { color: #F36E37; }
+
+/* ── CTA ── */
+.cta-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 5px;
+  flex-shrink: 0;
+  padding: 4px 0;
+}
+
+.cta-headline {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 30px;
+  font-weight: 700;
+  font-style: italic;
+  color: #111;
+  line-height: 1.05;
+  margin: 0;
+}
+
+.cta-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 8px;
+  color: #888;
+  line-height: 1.5;
+  margin: 0;
+  max-width: 72%;
+}
+
+.cta-btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: #fff;
+  background: #F36E37;
+  padding: 7px 18px;
+  border-radius: 20px;
+  margin-top: 2px;
+  white-space: nowrap;
+  box-shadow: 0 2px 10px rgba(243,110,55,0.3);
+}
 
 /* ── KEUNGGULAN ── */
 .keunggulan-section {

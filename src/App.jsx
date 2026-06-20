@@ -180,9 +180,16 @@ export default function App() {
             </div>
           </div>
 
+          {/* CTA */}
+          <div className="cta-section">
+            <h2 className="cta-headline">See It For Yourself</h2>
+            <p className="cta-sub">Transform your architectural designs into photorealistic visuals in seconds. No 3D skills required.</p>
+            <div className="cta-btn">Try Free at renviz.app →</div>
+          </div>
+
           {/* Keunggulan */}
           <div className="keunggulan-section">
-            <div className="keunggulan-pill">Why Choose Renviz?</div>
+            <div className="keunggulan-pill">WHY CHOOSE RENVIZ?</div>
             <div className="keunggulan-panel">
               {KEUNGGULAN.map((k, i) => (
                 <div key={i} className="keunggulan-item">
