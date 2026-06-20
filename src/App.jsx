@@ -16,34 +16,11 @@ const AFTER_BULLETS = [
   'Instantly looks like a real building',
 ]
 
-const SparkleIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 2 L13.6 10.4 L22 12 L13.6 13.6 L12 22 L10.4 13.6 L2 12 L10.4 10.4 Z" />
-  </svg>
-)
-const LayersIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 3 L21 8 L12 13 L3 8 Z" />
-    <path d="M3 13 L12 18 L21 13" />
-  </svg>
-)
-const TypeIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <rect x="3" y="3" width="18" height="18" rx="3" />
-    <path d="M8 8 L16 8 M12 8 L12 16" />
-  </svg>
-)
-const StarIcon = () => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M12 3 L14.6 9 L21 9.6 L16.2 13.9 L17.7 20 L12 16.7 L6.3 20 L7.8 13.9 L3 9.6 L9.4 9 Z" />
-  </svg>
-)
-
-const KEUNGGULAN = [
-  { Icon: SparkleIcon, title: 'Faster Workflow', desc: 'Get photorealistic renders in seconds, not hours' },
-  { Icon: LayersIcon, title: 'Client-Ready Output', desc: 'Present designs that clients can immediately understand' },
-  { Icon: TypeIcon, title: 'No 3D Skills Needed', desc: 'Just upload your design file and let AI do the work' },
-  { Icon: StarIcon, title: 'Professional Quality', desc: 'Results on par with high-end 3D rendering studios' },
+const STEPS = [
+  { n: 1, title: 'Screenshot Your Model', desc: 'Capture a screenshot of your SketchUp model' },
+  { n: 2, title: 'Upload to Renviz', desc: 'Upload your screenshot to the Renviz app' },
+  { n: 3, title: 'Choose Render Mode', desc: 'Select your render mode (Interior / Exterior)' },
+  { n: 4, title: 'Download Result', desc: 'Download your photorealistic result' },
 ]
 
 function ImageSlot({ label, image, onUpload, inputRef }) {
@@ -186,15 +163,15 @@ export default function App() {
             <div className="cta-link">Try Free at renviz.app →</div>
           </div>
 
-          {/* Keunggulan */}
+          {/* How It Works */}
           <div className="keunggulan-section">
-            <div className="keunggulan-pill">WHY CHOOSE RENVIZ?</div>
+            <div className="keunggulan-pill">HOW IT WORKS</div>
             <div className="keunggulan-panel">
-              {KEUNGGULAN.map((k, i) => (
-                <div key={i} className="keunggulan-item">
-                  <div className="keunggulan-icon"><k.Icon /></div>
-                  <div className="keunggulan-title">{k.title}</div>
-                  <div className="keunggulan-desc">{k.desc}</div>
+              {STEPS.map((s) => (
+                <div key={s.n} className="keunggulan-item">
+                  <div className="step-number">{s.n}</div>
+                  <div className="keunggulan-title">{s.title}</div>
+                  <div className="keunggulan-desc">{s.desc}</div>
                 </div>
               ))}
             </div>
