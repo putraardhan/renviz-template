@@ -2,44 +2,61 @@ import { useState, useRef, useCallback } from 'react'
 import domtoimage from 'dom-to-image-more'
 import './App.css'
 
-const BEFORE_POINTS = [
-  'Tampilan flat tanpa material',
-  'Tidak ada pencahayaan realistis',
-  'Sulit dipresentasikan ke klien',
-  'Hanya bisa dilihat oleh arsitek',
+const BEFORE_BULLETS = [
+  'Tampilan flat tanpa material realistis',
+  'Tidak ada pencahayaan yang dramatis',
+  'Sulit dipresentasikan ke klien awam',
+  'Hanya bisa dipahami oleh arsitek',
 ]
 
-const AFTER_POINTS = [
-  'Material dan tekstur realistis',
+const AFTER_BULLETS = [
+  'Material dan tekstur terlihat nyata',
   'Pencahayaan natural & dramatis',
-  'Siap presentasi ke klien',
-  'Langsung terlihat jadi nyata',
+  'Siap presentasi langsung ke klien',
+  'Langsung terlihat jadi bangunan nyata',
 ]
 
-const KENAPA = [
-  { icon: '◈', title: 'Visual Lebih Realistis', desc: 'Render AI menghasilkan tampilan nyata dalam detik' },
-  { icon: '❋', title: 'Desain Lebih Padat', desc: 'Semua detail tersampaikan dengan jelas ke klien' },
-  { icon: 'T', title: 'Tipografi Elegan', desc: 'Presentasi profesional dengan visual berkualitas tinggi' },
-  { icon: '☆', title: 'Siap Presentasi', desc: 'Langsung bisa digunakan untuk pitching ke klien' },
+const SparkleIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 2 L13.6 10.4 L22 12 L13.6 13.6 L12 22 L10.4 13.6 L2 12 L10.4 10.4 Z" />
+  </svg>
+)
+const LayersIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 3 L21 8 L12 13 L3 8 Z" />
+    <path d="M3 13 L12 18 L21 13" />
+  </svg>
+)
+const TypeIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <rect x="3" y="3" width="18" height="18" rx="3" />
+    <path d="M8 8 L16 8 M12 8 L12 16" />
+  </svg>
+)
+const StarIcon = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M12 3 L14.6 9 L21 9.6 L16.2 13.9 L17.7 20 L12 16.7 L6.3 20 L7.8 13.9 L3 9.6 L9.4 9 Z" />
+  </svg>
+)
+
+const KEUNGGULAN = [
+  { Icon: SparkleIcon, title: 'Visual Lebih Realistis', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.' },
+  { Icon: LayersIcon, title: 'Desain Lebih Padat', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.' },
+  { Icon: TypeIcon, title: 'Tipografi Elegan', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.' },
+  { Icon: StarIcon, title: 'Siap Presentasi', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.' },
 ]
 
 function ImageSlot({ label, image, onUpload, inputRef }) {
-  const handleDrop = (e) => {
-    e.preventDefault()
-    const file = e.dataTransfer.files[0]
-    if (file && file.type.startsWith('image/')) processFile(file)
-  }
   const processFile = (file) => {
     const reader = new FileReader()
     reader.onload = (ev) => onUpload(ev.target.result)
     reader.readAsDataURL(file)
   }
-
   return (
     <div
       className="img-slot"
       onClick={!image ? () => inputRef.current?.click() : undefined}
-      onDrop={handleDrop}
+      onDrop={(e) => { e.preventDefault(); const f = e.dataTransfer.files[0]; if (f?.type.startsWith('image/')) processFile(f) }}
       onDragOver={(e) => e.preventDefault()}
       style={{ cursor: image ? 'default' : 'pointer' }}
     >
@@ -50,7 +67,7 @@ function ImageSlot({ label, image, onUpload, inputRef }) {
         </>
       ) : (
         <div className="slot-placeholder">
-          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="3" width="18" height="18" rx="2" />
             <circle cx="8.5" cy="8.5" r="1.5" />
             <polyline points="21 15 16 10 5 21" />
@@ -74,7 +91,7 @@ export default function App() {
   const afterInputRef = useRef(null)
   const templateRef = useRef(null)
 
-  const displayProject = projectName.trim() || 'Nama Project'
+  const displayProject = projectName.trim() || 'Lorem Ipsum'
   const words = displayProject.split(' ')
   const projFirst = words[0]
   const projRest = words.slice(1).join(' ')
@@ -102,8 +119,11 @@ export default function App() {
 
   return (
     <div className="app-shell">
-
       <div className="template-wrapper" ref={templateRef}>
+        <div className="dots dots--tl" />
+        <div className="dots dots--tr" />
+        <div className="dots dots--bl" />
+        <div className="dots dots--br" />
         <div className="template-inner">
 
           {/* Brand pill */}
@@ -112,63 +132,75 @@ export default function App() {
             RENVIZ · AI RENDER
           </div>
 
+          {/* Header */}
+          <div className="header-row">
+            <span className="header-before">Before</span>
+            <span className="header-arrow">→</span>
+            <span className="header-after">After</span>
+          </div>
+
+          <p className="header-sub">
+            Lihat perbedaan nyata antara desain mentah dan hasil rendering AI.<br />
+            Dari konsep menjadi visual yang siap dipresentasikan.
+          </p>
+
           {/* Cards */}
           <div className="cards-row">
-
             {/* BEFORE */}
             <div className="card card--before">
               <div className="card-label card-label--before">BEFORE</div>
               <ImageSlot label="before" image={beforeImage} onUpload={setBeforeImage} inputRef={beforeInputRef} />
               <div className="card-body">
-                <div className="card-eyebrow card-eyebrow--before">AS DESIGNED</div>
+                <div className="eyebrow eyebrow--before">AS DESIGNED</div>
                 <div className="card-title">
-                  <span className="card-title-first">Lorem </span>
-                  <span className="card-title-rest">Ipsum</span>
+                  <span className="title-black">Lorem </span>
+                  <span className="title-orange-italic">Ipsum</span>
                 </div>
-                <ul className="point-list">
-                  {BEFORE_POINTS.map((p, i) => (
-                    <li key={i} className="point-item point-item--before">
-                      <span className="point-icon">⊗</span>{p}
+                <p className="card-desc">Tampilan desain dalam kondisi awal sebelum diproses oleh AI rendering Renviz.</p>
+                <ul className="bullet-list">
+                  {BEFORE_BULLETS.map((b, i) => (
+                    <li key={i} className="bullet-item bullet--before">
+                      <span className="bullet-icon">⊗</span>{b}
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
 
-            {/* Arrow */}
-            <div className="arrow-divider">→</div>
+            {/* Arrow center */}
+            <div className="center-arrow">→</div>
 
             {/* AFTER */}
             <div className="card card--after">
               <div className="card-label card-label--after">AFTER</div>
               <ImageSlot label="after" image={afterImage} onUpload={setAfterImage} inputRef={afterInputRef} />
               <div className="card-body">
-                <div className="card-eyebrow card-eyebrow--after">RENDERED WITH AI</div>
+                <div className="eyebrow eyebrow--after">RENDERED WITH AI</div>
                 <div className="card-title">
-                  <span className="card-title-first">{projFirst} </span>
-                  {projRest && <span className="card-title-rest">{projRest}</span>}
+                  <span className="title-black">{projFirst} </span>
+                  {projRest && <span className="title-orange-italic">{projRest}</span>}
                 </div>
-                <ul className="point-list">
-                  {AFTER_POINTS.map((p, i) => (
-                    <li key={i} className="point-item point-item--after">
-                      <span className="point-icon">⊙</span>{p}
+                <p className="card-desc">Hasil render AI Renviz yang mengubah desain mentah menjadi visual fotorealistis.</p>
+                <ul className="bullet-list">
+                  {AFTER_BULLETS.map((b, i) => (
+                    <li key={i} className="bullet-item bullet--after">
+                      <span className="bullet-icon">⊙</span>{b}
                     </li>
                   ))}
                 </ul>
               </div>
             </div>
-
           </div>
 
-          {/* Kenapa Renviz */}
-          <div className="kenapa-section">
-            <div className="kenapa-pill">KENAPA HARUS PAKAI RENVIZ?</div>
-            <div className="kenapa-row">
-              {KENAPA.map((k, i) => (
-                <div key={i} className="kenapa-item">
-                  <div className="kenapa-icon">{k.icon}</div>
-                  <div className="kenapa-title">{k.title}</div>
-                  <div className="kenapa-desc">{k.desc}</div>
+          {/* Keunggulan */}
+          <div className="keunggulan-section">
+            <div className="keunggulan-pill">KEUNGGULAN REDESIGN</div>
+            <div className="keunggulan-panel">
+              {KEUNGGULAN.map((k, i) => (
+                <div key={i} className="keunggulan-item">
+                  <div className="keunggulan-icon"><k.Icon /></div>
+                  <div className="keunggulan-title">{k.title}</div>
+                  <div className="keunggulan-desc">{k.desc}</div>
                 </div>
               ))}
             </div>
@@ -197,7 +229,6 @@ export default function App() {
           {downloading ? 'Generating...' : 'Download PNG'}
         </button>
       </div>
-
     </div>
   )
 }
