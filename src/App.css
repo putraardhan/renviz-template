@@ -75,11 +75,10 @@
 
 /* ── CARDS ROW ── */
 .cards-row {
+  display: grid;
   grid-template-columns: 1fr 1fr;
-}
-
-.label-row {
-  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  width: 100%;
 }
 
 /* ── DARK CARD ── */
