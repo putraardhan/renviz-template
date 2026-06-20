@@ -182,9 +182,8 @@ export default function App() {
 
           {/* CTA */}
           <div className="cta-section">
-            <h2 className="cta-headline">See It For Yourself</h2>
             <p className="cta-sub">Transform your architectural designs into photorealistic visuals in seconds. No 3D skills required.</p>
-            <div className="cta-btn">Try Free at renviz.app →</div>
+            <div className="cta-link">Try Free at renviz.app →</div>
           </div>
 
           {/* Keunggulan */}
