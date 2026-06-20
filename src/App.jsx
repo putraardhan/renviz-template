@@ -1,5 +1,5 @@
 import { useState, useRef, useCallback } from 'react'
-import html2canvas from 'html2canvas'
+import domtoimage from 'dom-to-image-more'
 import './App.css'
 
 function UploadSlot({ label, image, onUpload, inputRef, projectFirst, projectRest }) {
@@ -45,7 +45,6 @@ function UploadSlot({ label, image, onUpload, inputRef, projectFirst, projectRes
         </div>
       </div>
 
-      {/* Project name block — only on After card */}
       {label === 'After' && (
         <div className="project-block">
           <span className="project-eyebrow">Rendered with AI</span>
@@ -55,7 +54,8 @@ function UploadSlot({ label, image, onUpload, inputRef, projectFirst, projectRes
           </div>
         </div>
       )}
-        {label === 'Before' && (
+
+      {label === 'Before' && (
         <div className="project-block">
           <span className="project-eyebrow">As Designed</span>
           <div className="project-name-line">
@@ -109,41 +109,18 @@ export default function App() {
     if (!templateRef.current) return
     setDownloading(true)
     try {
-      // Draw dot grid onto a canvas first, then use as background-image data URL
-      // so html2canvas can capture it reliably
-      const dotCanvas = document.createElement('canvas')
-      dotCanvas.width = 44
-      dotCanvas.height = 44
-      const ctx = dotCanvas.getContext('2d')
-      ctx.fillStyle = '#f5f4f1'
-      ctx.fillRect(0, 0, 44, 44)
-      ctx.beginPath()
-      ctx.arc(22, 22, 1.5, 0, Math.PI * 2)  // radius 1 → 1.5
-      ctx.fillStyle = '#555'                  // warna lebih gelap
-      ctx.fill()
-      const dotDataUrl = dotCanvas.toDataURL()
-
-      const canvas = await html2canvas(templateRef.current, {
-        scale: 3,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        backgroundColor: '#f5f4f1',
-        onclone: (doc, el) => {
-          el.style.borderRadius = '0'
-          // Replace pseudo dot-grid div with inline background
-          const dotDiv = el.querySelector('.dot-grid')
-          if (dotDiv) {
-            dotDiv.style.backgroundImage = `url(${dotDataUrl})`
-            dotDiv.style.backgroundSize = '22px 22px'
-            dotDiv.style.backgroundRepeat = 'repeat'
-          }
+      const dataUrl = await domtoimage.toPng(templateRef.current, {
+        width: templateRef.current.offsetWidth * 3,
+        height: templateRef.current.offsetHeight * 3,
+        style: {
+          transform: `scale(3)`,
+          transformOrigin: 'top left',
         }
       })
       const link = document.createElement('a')
       const slug = displayProject.toLowerCase().replace(/\s+/g, '-')
       link.download = `renviz-${slug}.png`
-      link.href = canvas.toDataURL('image/png')
+      link.href = dataUrl
       link.click()
     } catch (err) {
       console.error(err)
@@ -155,16 +132,13 @@ export default function App() {
   return (
     <div className="app-shell">
 
-      {/* ── TEMPLATE ── */}
       <div className="template-wrapper" id="rv-template" ref={templateRef}>
         <div className="dot-grid" />
 
         <div className="template-inner">
 
-          {/* brand pill */}
           <div className="brand-pill">Renviz · AI Render</div>
 
-          {/* Before / After labels */}
           <div className="label-row">
             <div className="label-col">
               <span className="label-big">Before</span>
@@ -174,7 +148,6 @@ export default function App() {
             </div>
           </div>
 
-          {/* cards */}
           <div className="cards-row">
             <UploadSlot
               label="Before"
@@ -197,7 +170,6 @@ export default function App() {
         </div>
       </div>
 
-      {/* ── CONTROLS ── */}
       <div className="controls">
         <div className="ctrl-group">
           <label className="ctrl-label">Nama Project</label>
