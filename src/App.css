@@ -33,7 +33,6 @@
   flex-direction: column;
   align-items: center;
   gap: 12px;
-  height: 100%;
 }
 
 /* ── BRAND PILL ── */
@@ -78,8 +77,6 @@
   grid-template-columns: 1fr 1fr;
   gap: 14px;
   width: 100%;
-  flex: 1;
-  min-height: 0;
 }
 
 /* ── DARK CARD ── */
@@ -91,7 +88,6 @@
   flex-direction: column;
   gap: 10px;
   position: relative;
-  min-height: 0;
 }
 
 /* ── POLAROID ── */
@@ -99,16 +95,16 @@
   background: #fff;
   padding: 6px 6px 22px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.5);
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 0;
 }
 
-.polaroid {
-  background: #fff;
-  padding: 6px 6px 22px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+.polaroid-inner {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  background: #2a2a2a;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .slot-img {
