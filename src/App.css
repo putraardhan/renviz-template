@@ -71,41 +71,6 @@
   flex-shrink: 0;
 }
 
-/* ── HEADER ── */
-.header-row {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  flex-shrink: 0;
-}
-
-.header-before,
-.header-after {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 52px;
-  font-weight: 700;
-  font-style: italic;
-  color: #111;
-  line-height: 1;
-}
-
-.header-arrow {
-  font-size: 28px;
-  color: #F36E37;
-  line-height: 1;
-  font-family: 'DM Sans', sans-serif;
-}
-
-.header-sub {
-  font-family: 'DM Sans', sans-serif;
-  font-size: 9px;
-  color: #888;
-  text-align: center;
-  line-height: 1.5;
-  flex-shrink: 0;
-}
-
 /* ── CARDS ROW ── */
 .cards-row {
   display: grid;

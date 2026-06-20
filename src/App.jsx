@@ -3,17 +3,17 @@ import domtoimage from 'dom-to-image-more'
 import './App.css'
 
 const BEFORE_BULLETS = [
-  'Tampilan flat tanpa material realistis',
-  'Tidak ada pencahayaan yang dramatis',
-  'Sulit dipresentasikan ke klien awam',
-  'Hanya bisa dipahami oleh arsitek',
+  'Flat appearance without realistic materials',
+  'No dramatic lighting',
+  'Hard to present to non-technical clients',
+  'Only architects can interpret it',
 ]
 
 const AFTER_BULLETS = [
-  'Material dan tekstur terlihat nyata',
-  'Pencahayaan natural & dramatis',
-  'Siap presentasi langsung ke klien',
-  'Langsung terlihat jadi bangunan nyata',
+  'Materials and textures look real',
+  'Natural & dramatic lighting',
+  'Ready to present directly to clients',
+  'Instantly looks like a real building',
 ]
 
 const SparkleIcon = () => (
@@ -40,10 +40,10 @@ const StarIcon = () => (
 )
 
 const KEUNGGULAN = [
-  { Icon: SparkleIcon, title: 'Visual Lebih Realistis', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.' },
-  { Icon: LayersIcon, title: 'Desain Lebih Padat', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.' },
-  { Icon: TypeIcon, title: 'Tipografi Elegan', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.' },
-  { Icon: StarIcon, title: 'Siap Presentasi', desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.' },
+  { Icon: SparkleIcon, title: 'Faster Workflow', desc: 'Get photorealistic renders in seconds, not hours' },
+  { Icon: LayersIcon, title: 'Client-Ready Output', desc: 'Present designs that clients can immediately understand' },
+  { Icon: TypeIcon, title: 'No 3D Skills Needed', desc: 'Just upload your design file and let AI do the work' },
+  { Icon: StarIcon, title: 'Professional Quality', desc: 'Results on par with high-end 3D rendering studios' },
 ]
 
 function ImageSlot({ label, image, onUpload, inputRef }) {
@@ -72,7 +72,7 @@ function ImageSlot({ label, image, onUpload, inputRef }) {
             <circle cx="8.5" cy="8.5" r="1.5" />
             <polyline points="21 15 16 10 5 21" />
           </svg>
-          <span>Upload Foto</span>
+          <span>Upload Photo</span>
         </div>
       )}
       <input ref={inputRef} type="file" accept="image/*" style={{ display: 'none' }}
@@ -91,7 +91,7 @@ export default function App() {
   const afterInputRef = useRef(null)
   const templateRef = useRef(null)
 
-  const displayProject = projectName.trim() || 'Lorem Ipsum'
+  const displayProject = projectName.trim() || 'Modern Villa'
   const words = displayProject.split(' ')
   const projFirst = words[0]
   const projRest = words.slice(1).join(' ')
@@ -132,18 +132,6 @@ export default function App() {
             RENVIZ · AI RENDER
           </div>
 
-          {/* Header */}
-          <div className="header-row">
-            <span className="header-before">Before</span>
-            <span className="header-arrow">→</span>
-            <span className="header-after">After</span>
-          </div>
-
-          <p className="header-sub">
-            Lihat perbedaan nyata antara desain mentah dan hasil rendering AI.<br />
-            Dari konsep menjadi visual yang siap dipresentasikan.
-          </p>
-
           {/* Cards */}
           <div className="cards-row">
             {/* BEFORE */}
@@ -153,10 +141,10 @@ export default function App() {
               <div className="card-body">
                 <div className="eyebrow eyebrow--before">AS DESIGNED</div>
                 <div className="card-title">
-                  <span className="title-black">Lorem </span>
-                  <span className="title-orange-italic">Ipsum</span>
+                  <span className="title-black">Raw </span>
+                  <span className="title-orange-italic">Concept</span>
                 </div>
-                <p className="card-desc">Tampilan desain dalam kondisi awal sebelum diproses oleh AI rendering Renviz.</p>
+                <p className="card-desc">The original design in its raw state before being processed by Renviz AI rendering.</p>
                 <ul className="bullet-list">
                   {BEFORE_BULLETS.map((b, i) => (
                     <li key={i} className="bullet-item bullet--before">
@@ -180,7 +168,7 @@ export default function App() {
                   <span className="title-black">{projFirst} </span>
                   {projRest && <span className="title-orange-italic">{projRest}</span>}
                 </div>
-                <p className="card-desc">Hasil render AI Renviz yang mengubah desain mentah menjadi visual fotorealistis.</p>
+                <p className="card-desc">Renviz AI render result that transforms a raw design into a photorealistic visual.</p>
                 <ul className="bullet-list">
                   {AFTER_BULLETS.map((b, i) => (
                     <li key={i} className="bullet-item bullet--after">
@@ -194,7 +182,7 @@ export default function App() {
 
           {/* Keunggulan */}
           <div className="keunggulan-section">
-            <div className="keunggulan-pill">KEUNGGULAN REDESIGN</div>
+            <div className="keunggulan-pill">Why Choose Renviz?</div>
             <div className="keunggulan-panel">
               {KEUNGGULAN.map((k, i) => (
                 <div key={i} className="keunggulan-item">
@@ -212,9 +200,9 @@ export default function App() {
       {/* Controls */}
       <div className="controls">
         <div className="ctrl-group">
-          <label className="ctrl-label">Nama Project</label>
+          <label className="ctrl-label">Project Name</label>
           <input className="ctrl-input" type="text" value={projectName}
-            onChange={(e) => setProjectName(e.target.value)} placeholder="mis. A+W House" />
+            onChange={(e) => setProjectName(e.target.value)} placeholder="e.g. A+W House" />
         </div>
         <div className="ctrl-uploads">
           <button className="upload-btn" onClick={() => beforeInputRef.current?.click()}>
